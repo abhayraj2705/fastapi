@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block title %}Blog Studio | Home{% endblock %}
+
+{% block hero %}
+<section class="hero">
+    <span class="tag">Latest Posts</span>
+    <h1>Publish, update, and manage your blog posts.</h1>
+    <p>
+        This page lists every blog stored in your SQLite database. Use the create button to add a post,
+        or the edit and delete actions on each card to manage existing entries.
+    </p>
+</section>
+{% endblock %}
+
+{% block content %}
+<section class="blog-list">
+    {% if blogs %}
+        {% for blog in blogs %}
+            <article class="card blog-card">
+                <div class="blog-meta">
+                    <span class="tag">Post #{{ blog.id }}</span>
+                    <span>Author: {{ blog.author }}</span>
+                </div>
+                <h2 class="title">{{ blog.title }}</h2>
+                <p class="content">{{ blog.content }}</p>
+                <div class="actions">
+                    <a href="/update/{{ blog.id }}">Edit</a>
+                    <a class="danger" href="/delete-page/{{ blog.id }}">Delete</a>
+                </div>
+            </article>
+        {% endfor %}
+    {% else %}
+        <div class="empty card">
+            <h2 class="title section-title">No posts yet</h2>
+            <p class="muted">Create the first blog post to see it listed here.</p>
+            <div class="actions">
+                <a class="button" href="/create">Create Post</a>
+            </div>
+        </div>
+    {% endif %}
+</section>
+{% endblock %}

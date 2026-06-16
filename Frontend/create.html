@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block title %}Blog Studio | Create{% endblock %}
+
+{% block hero %}
+<section class="hero">
+    <span class="tag">New Post</span>
+    <h1>Write a fresh blog entry.</h1>
+    <p>Add a title, content, and author name. When you submit, the backend saves the record and sends you back to the home page.</p>
+</section>
+{% endblock %}
+
+{% block content %}
+<section class="split">
+    <div class="card card-pad">
+        <form method="post" action="/create" class="form-grid">
+            <div>
+                <label for="title">Title</label>
+                <input id="title" name="title" type="text" placeholder="Enter blog title" required>
+            </div>
+            <div>
+                <label for="author">Author</label>
+                <input id="author" name="author" type="text" placeholder="Author name" required>
+            </div>
+            <div>
+                <label for="content">Content</label>
+                <textarea id="content" name="content" placeholder="Write your blog post here..." required></textarea>
+            </div>
+            <div class="actions">
+                <button type="submit">Publish Post</button>
+                <a href="/">Cancel</a>
+            </div>
+        </form>
+    </div>
+
+    <aside class="card card-pad">
+        <span class="tag">Tip</span>
+        <h2 class="title section-title">Keep it readable</h2>
+        <p class="content muted">
+            Short titles and clear paragraphs work best for this layout. The content field supports multi-line text.
+        </p>
+    </aside>
+</section>
+{% endblock %}

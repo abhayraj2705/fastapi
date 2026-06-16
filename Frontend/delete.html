@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block title %}Blog Studio | Delete{% endblock %}
+
+{% block hero %}
+<section class="hero">
+    <span class="tag">Delete Post</span>
+    <h1>Confirm removal of this blog entry.</h1>
+    <p>This action is permanent. If you continue, the post will be deleted from the database.</p>
+</section>
+{% endblock %}
+
+{% block content %}
+<section class="split">
+    <div class="card card-pad">
+        <span class="tag">Preview</span>
+        <h2 class="title section-title">{{ blog.title }}</h2>
+        <p class="muted">Author: {{ blog.author }}</p>
+        <p class="content">{{ blog.content }}</p>
+    </div>
+
+    <div class="card card-pad">
+        <h2 class="title section-title">Are you sure?</h2>
+        <p class="content muted">
+            If you click delete, this blog post will be removed immediately.
+        </p>
+        <form method="post" action="/delete/{{ blog.id }}" class="actions">
+            <button class="danger" type="submit">Delete Post</button>
+            <a href="/">Cancel</a>
+        </form>
+    </div>
+</section>
+{% endblock %}
