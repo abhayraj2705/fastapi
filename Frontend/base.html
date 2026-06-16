@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Blog Studio{% endblock %}</title>
+    <style>
+        :root {
+            --bg: #f6f7fb;
+            --surface: #ffffff;
+            --text: #172033;
+            --muted: #647086;
+            --line: #dfe4ee;
+            --accent: #2563eb;
+            --accent-dark: #1d4ed8;
+            --accent-soft: #eef4ff;
+            --danger: #dc2626;
+            --danger-soft: #fef2f2;
+            --shadow: 0 12px 28px rgba(23, 32, 51, 0.08);
+            --radius: 8px;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html, body {
+            margin: 0;
+            min-height: 100%;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            color: var(--text);
+            min-height: 100vh;
+            background: var(--bg);
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        .shell {
+            width: min(980px, calc(100% - 32px));
+            margin: 0 auto;
+            padding: 24px 0 48px;
+        }
+
+        .topbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 14px;
+            padding: 16px 18px;
+            border: 1px solid var(--line);
+            border-radius: var(--radius);
+            background: var(--surface);
+            box-shadow: var(--shadow);
+        }
+
+        .brand {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .brand strong {
+            font-size: 1.25rem;
+            line-height: 1.2;
+        }
+
+        .brand span {
+            color: var(--muted);
+            font-size: 0.9rem;
+        }
+
+        .nav {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .chip,
+        .button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            min-height: 40px;
+            border-radius: 6px;
+            border: 1px solid transparent;
+            padding: 10px 14px;
+            font-weight: 600;
+            transition: background 160ms ease, border-color 160ms ease;
+        }
+
+        .chip {
+            background: #f8fafc;
+            border-color: var(--line);
+        }
+
+        .button {
+            background: var(--accent);
+            color: white;
+        }
+
+        .chip:hover {
+            background: var(--accent-soft);
+            border-color: #bfd2ff;
+        }
+
+        .button:hover {
+            background: var(--accent-dark);
+        }
+
+        .hero {
+            margin: 22px 0 18px;
+            padding: 22px 24px;
+            border: 1px solid var(--line);
+            border-radius: var(--radius);
+            background: var(--surface);
+            box-shadow: var(--shadow);
+        }
+
+        .hero h1 {
+            margin: 10px 0 0;
+            font-size: clamp(1.6rem, 3vw, 2.4rem);
+            line-height: 1.2;
+            max-width: 760px;
+        }
+
+        .hero p {
+            margin: 10px 0 0;
+            max-width: 760px;
+            color: var(--muted);
+            line-height: 1.6;
+        }
+
+        .grid {
+            display: grid;
+            gap: 18px;
+        }
+
+        .card {
+            border: 1px solid var(--line);
+            border-radius: var(--radius);
+            background: var(--surface);
+            box-shadow: var(--shadow);
+        }
+
+        .card-pad {
+            padding: 22px;
+        }
+
+        .form-grid {
+            display: grid;
+            gap: 16px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 0.92rem;
+            font-weight: 600;
+        }
+
+        input,
+        textarea {
+            width: 100%;
+            border: 1px solid var(--line);
+            border-radius: 6px;
+            padding: 12px 14px;
+            font: inherit;
+            background: #fff;
+            color: var(--text);
+            outline: none;
+            transition: border-color 160ms ease, box-shadow 160ms ease;
+        }
+
+        textarea {
+            min-height: 180px;
+            resize: vertical;
+            line-height: 1.7;
+        }
+
+        input:focus,
+        textarea:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.14);
+        }
+
+        .muted {
+            color: var(--muted);
+        }
+
+        .blog-list {
+            display: grid;
+            gap: 14px;
+        }
+
+        .blog-card {
+            padding: 22px;
+            display: grid;
+            gap: 12px;
+        }
+
+        .blog-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            color: var(--muted);
+            font-size: 0.9rem;
+        }
+
+        .tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            width: fit-content;
+            padding: 6px 10px;
+            border-radius: 6px;
+            background: var(--accent-soft);
+            color: var(--accent);
+            font-weight: 700;
+            font-size: 0.78rem;
+            text-transform: uppercase;
+        }
+
+        .title {
+            margin: 0;
+            font-size: clamp(1.25rem, 2vw, 1.55rem);
+            line-height: 1.25;
+        }
+
+        .section-title {
+            font-size: 1.35rem;
+        }
+
+        .tag + .section-title {
+            margin-top: 12px;
+        }
+
+        .content {
+            margin: 0;
+            line-height: 1.65;
+            color: #303a4c;
+            white-space: pre-wrap;
+        }
+
+        .content.muted {
+            color: var(--muted);
+        }
+
+        .actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .actions a,
+        .actions button {
+            min-height: 40px;
+            border: 1px solid var(--line);
+            background: #f8fafc;
+            color: var(--text);
+            border-radius: 6px;
+            padding: 10px 14px;
+            font: inherit;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .actions button[type="submit"] {
+            background: var(--accent);
+            border-color: var(--accent);
+            color: white;
+        }
+
+        .actions .button {
+            background: var(--accent);
+            border-color: var(--accent);
+            color: white;
+        }
+
+        .actions .danger {
+            background: var(--danger-soft);
+            color: var(--danger);
+            border-color: #fecaca;
+        }
+
+        .actions button.danger {
+            background: var(--danger);
+            border-color: var(--danger);
+            color: white;
+        }
+
+        .empty {
+            text-align: center;
+            padding: 32px;
+            color: var(--muted);
+            border: 1px dashed var(--line);
+            border-radius: var(--radius);
+            background: var(--surface);
+        }
+
+        .split {
+            display: grid;
+            grid-template-columns: minmax(0, 1.4fr) minmax(260px, 0.6fr);
+            gap: 18px;
+            align-items: start;
+        }
+
+        .stack {
+            display: grid;
+            gap: 18px;
+        }
+
+        .footer-note {
+            margin-top: 24px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 880px) {
+            .split {
+                grid-template-columns: 1fr;
+            }
+
+            .topbar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .nav {
+                justify-content: flex-start;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .shell {
+                width: min(100% - 20px, 1120px);
+                padding-top: 12px;
+            }
+
+            .hero,
+            .card-pad,
+            .blog-card {
+                padding: 16px;
+            }
+
+            .topbar {
+                justify-content: center;
+                text-align: center;
+            }
+
+            .nav {
+                justify-content: center;
+                width: 100%;
+            }
+
+            .nav a {
+                flex: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="shell">
+        <header class="topbar">
+            <div class="brand">
+                <strong>Blog Studio</strong>
+                <span>Simple FastAPI + SQLAlchemy blog dashboard</span>
+            </div>
+            <nav class="nav">
+                <a class="chip" href="/">Home</a>
+                <a class="button" href="/create">New Post</a>
+            </nav>
+        </header>
+
+        {% block hero %}{% endblock %}
+
+        <main class="grid">
+            {% block content %}{% endblock %}
+        </main>
+
+        <div class="footer-note">Built for your FastAPI blog backend.</div>
+    </div>
+</body>
+</html>

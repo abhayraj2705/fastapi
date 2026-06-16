@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% block title %}Blog Studio | Update{% endblock %}
+
+{% block hero %}
+<section class="hero">
+    <span class="tag">Edit Post</span>
+    <h1>Refine an existing blog entry.</h1>
+    <p>Update the title, author, or content. The record is saved with the same blog ID.</p>
+</section>
+{% endblock %}
+
+{% block content %}
+<section class="split">
+    <div class="card card-pad">
+        <form id="update-form" action="/update/{{ blog.id }}" class="form-grid">
+            <div>
+                <label for="title">Title</label>
+                <input id="title" name="title" type="text" value="{{ blog.title }}" required>
+            </div>
+            <div>
+                <label for="author">Author</label>
+                <input id="author" name="author" type="text" value="{{ blog.author }}" required>
+            </div>
+            <div>
+                <label for="content">Content</label>
+                <textarea id="content" name="content" required>{{ blog.content }}</textarea>
+            </div>
+            <div class="actions">
+                <button type="submit">Save Changes</button>
+                <a href="/">Back</a>
+            </div>
+        </form>
+    </div>
+
+    <aside class="card card-pad">
+        <span class="tag">Current Post</span>
+        <h2 class="title section-title">{{ blog.title }}</h2>
+        <p class="muted">Author: {{ blog.author }}</p>
+        <p class="content">{{ blog.content }}</p>
+    </aside>
+</section>
+
+<script>
+    const updateForm = document.getElementById("update-form");
+
+    updateForm.addEventListener("submit", async (event) => {
+        event.preventDefault();
+
+        const response = await fetch(updateForm.action, {
+            method: "PUT",
+            body: new FormData(updateForm)
+        });
+
+        if (response.redirected) {
+            window.location.href = response.url;
+        } else if (response.ok) {
+            window.location.href = "/";
+        }
+    });
+</script>
+{% endblock %}
