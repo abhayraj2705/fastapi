@@ -103,7 +103,7 @@ def update_page(
     )
     
     
-@app.post("/update/{blog_id}")
+@app.put("/update/{blog_id}")
 def update_blog(
     blog_id: int,
     title: str = Form(...),

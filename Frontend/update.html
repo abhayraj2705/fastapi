@@ -13,7 +13,7 @@
 {% block content %}
 <section class="split">
     <div class="card card-pad">
-        <form method="post" action="/update/{{ blog.id }}" class="form-grid">
+        <form id="update-form" action="/update/{{ blog.id }}" class="form-grid">
             <div>
                 <label for="title">Title</label>
                 <input id="title" name="title" type="text" value="{{ blog.title }}" required>
@@ -40,4 +40,23 @@
         <p class="content">{{ blog.content }}</p>
     </aside>
 </section>
+
+<script>
+    const updateForm = document.getElementById("update-form");
+
+    updateForm.addEventListener("submit", async (event) => {
+        event.preventDefault();
+
+        const response = await fetch(updateForm.action, {
+            method: "PUT",
+            body: new FormData(updateForm)
+        });
+
+        if (response.redirected) {
+            window.location.href = response.url;
+        } else if (response.ok) {
+            window.location.href = "/";
+        }
+    });
+</script>
 {% endblock %}
