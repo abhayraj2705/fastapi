@@ -1,7 +1,7 @@
 from fastapi import FastAPI, Request
 from fastapi import Form, Depends
 from fastapi.responses import HTMLResponse
-from fastapi.responses import RedirectResponse
+from fastapi.responses import RedirectResponse, Response
 from fastapi.templating import Jinja2Templates
 from sqlalchemy import create_engine, String, select
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
@@ -48,6 +48,10 @@ app = FastAPI()
 
 # Tells FastAPI where the HTML template files are located.
 templates = Jinja2Templates(directory="Frontend")
+
+@app.head("/")
+def home_head():
+    return Response(status_code=200)
 
 @app.get("/", response_class=HTMLResponse)
 def home(request: Request, db: Session = Depends(get_db)):
