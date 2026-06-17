@@ -1,5 +1,7 @@
 const authArea = document.getElementById("authArea");
 const appArea = document.getElementById("appArea");
+const loginTab = document.getElementById("loginTab");
+const signupTab = document.getElementById("signupTab");
 const signupForm = document.getElementById("signupForm");
 const loginForm = document.getElementById("loginForm");
 const rentalForm = document.getElementById("rentalForm");
@@ -17,6 +19,7 @@ const notes = document.getElementById("notes");
 const rentalList = document.getElementById("rentalList");
 const userBox = document.getElementById("userBox");
 const messageBox = document.getElementById("messageBox");
+const activityPanel = document.getElementById("activityPanel");
 const logoutButton = document.getElementById("logoutButton");
 const refreshButton = document.getElementById("refreshButton");
 const cancelEditButton = document.getElementById("cancelEditButton");
@@ -49,16 +52,32 @@ function getAuthHeaders() {
 
 function updateScreen() {
     if (token) {
-        authArea.style.display = "none";
+        authArea.classList.add("hidden");
         appArea.style.display = "grid";
+        activityPanel.style.display = "block";
         logoutButton.style.display = "inline-block";
     } else {
-        authArea.style.display = "grid";
+        authArea.classList.remove("hidden");
         appArea.style.display = "none";
+        activityPanel.style.display = "none";
         logoutButton.style.display = "none";
         userBox.textContent = "Not logged in.";
         rentalList.innerHTML = "";
     }
+}
+
+function showLoginForm() {
+    loginForm.classList.remove("hidden");
+    signupForm.classList.add("hidden");
+    loginTab.classList.add("active");
+    signupTab.classList.remove("active");
+}
+
+function showSignupForm() {
+    signupForm.classList.remove("hidden");
+    loginForm.classList.add("hidden");
+    signupTab.classList.add("active");
+    loginTab.classList.remove("active");
 }
 
 function resetRentalForm() {
@@ -201,6 +220,7 @@ signupForm.addEventListener("submit", async function (event) {
         showJson(data);
         showMessage("Account created. Login to manage rentals.");
         signupForm.reset();
+        showLoginForm();
     } catch (error) {
         showMessage(error.message);
     }
@@ -289,6 +309,10 @@ async function deleteRental(id) {
 }
 
 refreshButton.addEventListener("click", loadDashboard);
+
+loginTab.addEventListener("click", showLoginForm);
+
+signupTab.addEventListener("click", showSignupForm);
 
 cancelEditButton.addEventListener("click", function () {
     resetRentalForm();

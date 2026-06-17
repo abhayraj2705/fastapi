@@ -21,33 +21,53 @@
             <button id="logoutButton" class="logout-button" type="button">Logout</button>
         </header>
 
-        <section id="authArea" class="auth-grid">
-            <form id="signupForm" class="panel">
-                <h2>Create Account</h2>
+        <section id="authArea" class="auth-shell">
+            <div class="auth-info">
+                <p class="eyebrow">Secure dashboard</p>
+                <h2>Manage rentals with clarity.</h2>
+                <p>Sign in to organize properties, tenants, agreements, rent amounts, and payment status from one workspace.</p>
+                <ul>
+                    <li>JWT protected access</li>
+                    <li>Private records for each user</li>
+                    <li>Simple rental tracking workflow</li>
+                </ul>
+            </div>
 
-                <label for="signupFullName">Full name</label>
-                <input id="signupFullName" type="text" placeholder="Property Manager">
+            <div class="auth-card">
+                <div class="auth-tabs">
+                    <button id="loginTab" class="auth-tab active" type="button">Login</button>
+                    <button id="signupTab" class="auth-tab" type="button">Create Account</button>
+                </div>
 
-                <label for="signupUsername">Username</label>
-                <input id="signupUsername" type="text" placeholder="manager" required>
+                <form id="loginForm" class="auth-form">
+                    <h2>Welcome Back</h2>
+                    <p>Login to continue to your rental dashboard.</p>
 
-                <label for="signupPassword">Password</label>
-                <input id="signupPassword" type="password" placeholder="secret123" required>
+                    <label for="loginUsername">Username</label>
+                    <input id="loginUsername" type="text" placeholder="manager" required>
 
-                <button type="submit">Signup</button>
-            </form>
+                    <label for="loginPassword">Password</label>
+                    <input id="loginPassword" type="password" placeholder="secret123" required>
 
-            <form id="loginForm" class="panel">
-                <h2>Login</h2>
+                    <button type="submit">Login</button>
+                </form>
 
-                <label for="loginUsername">Username</label>
-                <input id="loginUsername" type="text" placeholder="manager" required>
+                <form id="signupForm" class="auth-form hidden">
+                    <h2>Create Account</h2>
+                    <p>Register as a property manager and start adding rentals.</p>
 
-                <label for="loginPassword">Password</label>
-                <input id="loginPassword" type="password" placeholder="secret123" required>
+                    <label for="signupFullName">Full name</label>
+                    <input id="signupFullName" type="text" placeholder="Property Manager">
 
-                <button type="submit">Login</button>
-            </form>
+                    <label for="signupUsername">Username</label>
+                    <input id="signupUsername" type="text" placeholder="manager" required>
+
+                    <label for="signupPassword">Password</label>
+                    <input id="signupPassword" type="password" placeholder="secret123" required>
+
+                    <button type="submit">Create Account</button>
+                </form>
+            </div>
         </section>
 
         <section id="appArea" class="app-grid">
@@ -111,7 +131,7 @@
             </section>
         </section>
 
-        <section class="panel">
+        <section id="activityPanel" class="panel">
             <h2>Activity</h2>
             <pre id="messageBox">Ready.</pre>
         </section>
