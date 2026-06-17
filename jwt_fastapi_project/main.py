@@ -1,3 +1,4 @@
+import os
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
@@ -14,10 +15,10 @@ from sqlalchemy.orm import Session, declarative_base, sessionmaker
 
 # -------------------- Basic settings --------------------
 
-SECRET_KEY = "change-this-secret-key-in-real-projects"
-ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = 30
-DATABASE_URL = "sqlite:///./jwt_auth.db"
+SECRET_KEY = os.getenv("JWT_SECRET_KEY", "change-this-secret-key-in-real-projects")
+ALGORITHM = os.getenv("JWT_ALGORITHM", "HS256")
+ACCESS_TOKEN_EXPIRE_MINUTES = int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES", "30"))
+DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./jwt_auth.db")
 FRONTEND_FOLDER = Path(__file__).parent / "frontend"
 
 
