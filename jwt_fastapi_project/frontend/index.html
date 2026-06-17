@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rental Manager</title>
+    <link rel="stylesheet" href="/frontend/style.css">
+</head>
+<body>
+    <main class="page">
+        <header class="hero">
+            <div class="hero-content">
+                <p class="eyebrow">Property rental management</p>
+                <h1>Rental Manager</h1>
+                <p>Manage property listings, tenant details, rental agreements, and payment status in one simple dashboard.</p>
+                <div class="hero-actions">
+                    <a href="#rentalForm" class="hero-link">Add rental</a>
+                    <a href="/docs" class="hero-link ghost-link">API docs</a>
+                </div>
+            </div>
+            <button id="logoutButton" class="logout-button" type="button">Logout</button>
+        </header>
+
+        <section id="authArea" class="auth-shell">
+            <div class="auth-info">
+                <p class="eyebrow">Secure dashboard</p>
+                <h2>Manage rentals with clarity.</h2>
+                <p>Sign in to organize properties, tenants, agreements, rent amounts, and payment status from one workspace.</p>
+                <ul>
+                    <li>JWT protected access</li>
+                    <li>Private records for each user</li>
+                    <li>Simple rental tracking workflow</li>
+                </ul>
+            </div>
+
+            <div class="auth-card">
+                <div class="auth-tabs">
+                    <button id="loginTab" class="auth-tab active" type="button">Login</button>
+                    <button id="signupTab" class="auth-tab" type="button">Create Account</button>
+                </div>
+
+                <form id="loginForm" class="auth-form">
+                    <h2>Welcome Back</h2>
+                    <p>Login to continue to your rental dashboard.</p>
+
+                    <label for="loginUsername">Username</label>
+                    <input id="loginUsername" type="text" placeholder="manager" required>
+
+                    <label for="loginPassword">Password</label>
+                    <input id="loginPassword" type="password" placeholder="secret123" required>
+
+                    <button type="submit">Login</button>
+                </form>
+
+                <form id="signupForm" class="auth-form hidden">
+                    <h2>Create Account</h2>
+                    <p>Register as a property manager and start adding rentals.</p>
+
+                    <label for="signupFullName">Full name</label>
+                    <input id="signupFullName" type="text" placeholder="Property Manager">
+
+                    <label for="signupUsername">Username</label>
+                    <input id="signupUsername" type="text" placeholder="manager" required>
+
+                    <label for="signupPassword">Password</label>
+                    <input id="signupPassword" type="password" placeholder="secret123" required>
+
+                    <button type="submit">Create Account</button>
+                </form>
+            </div>
+        </section>
+
+        <section id="appArea" class="app-grid">
+            <form id="rentalForm" class="panel">
+                <h2 id="rentalFormTitle">Add Rental Record</h2>
+
+                <input id="rentalId" type="hidden">
+
+                <label for="propertyName">Property name</label>
+                <input id="propertyName" type="text" placeholder="Green View Apartment" required>
+
+                <label for="propertyAddress">Property address</label>
+                <textarea id="propertyAddress" rows="3" placeholder="12 Park Street, Pune" required></textarea>
+
+                <label for="tenantName">Tenant name</label>
+                <input id="tenantName" type="text" placeholder="Rahul Sharma" required>
+
+                <label for="tenantPhone">Tenant phone</label>
+                <input id="tenantPhone" type="text" placeholder="9876543210">
+
+                <div class="two-column">
+                    <div>
+                        <label for="startDate">Agreement start</label>
+                        <input id="startDate" type="date" required>
+                    </div>
+                    <div>
+                        <label for="endDate">Agreement end</label>
+                        <input id="endDate" type="date" required>
+                    </div>
+                </div>
+
+                <label for="monthlyRent">Monthly rent</label>
+                <input id="monthlyRent" type="number" min="1" placeholder="25000" required>
+
+                <label for="paymentStatus">Payment status</label>
+                <select id="paymentStatus">
+                    <option>Pending</option>
+                    <option>Paid</option>
+                    <option>Late</option>
+                </select>
+
+                <label for="notes">Notes</label>
+                <textarea id="notes" rows="4" placeholder="Deposit, maintenance, or agreement notes"></textarea>
+
+                <div class="actions">
+                    <button id="saveRentalButton" type="submit">Save Record</button>
+                    <button id="cancelEditButton" class="secondary-button" type="button">Cancel</button>
+                </div>
+            </form>
+
+            <section class="panel">
+                <div class="section-header">
+                    <div>
+                        <h2>Rental Records</h2>
+                        <p id="userBox">Not logged in.</p>
+                    </div>
+                    <button id="refreshButton" class="secondary-button" type="button">Refresh</button>
+                </div>
+
+                <div id="rentalList" class="rental-list"></div>
+            </section>
+        </section>
+
+        <section id="activityPanel" class="panel">
+            <h2>Activity</h2>
+            <pre id="messageBox">Ready.</pre>
+        </section>
+    </main>
+
+    <script src="/frontend/script.js"></script>
+</body>
+</html>
