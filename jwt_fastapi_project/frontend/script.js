@@ -2,6 +2,7 @@ const authArea = document.getElementById("authArea");
 const appArea = document.getElementById("appArea");
 const loginTab = document.getElementById("loginTab");
 const signupTab = document.getElementById("signupTab");
+const demoLoginButton = document.getElementById("demoLoginButton");
 const signupForm = document.getElementById("signupForm");
 const loginForm = document.getElementById("loginForm");
 const rentalForm = document.getElementById("rentalForm");
@@ -323,6 +324,12 @@ refreshButton.addEventListener("click", loadDashboard);
 loginTab.addEventListener("click", showLoginForm);
 
 signupTab.addEventListener("click", showSignupForm);
+
+demoLoginButton.addEventListener("click", function () {
+    document.getElementById("loginUsername").value = "manager";
+    document.getElementById("loginPassword").value = "secret123";
+    loginForm.requestSubmit();
+});
 
 cancelEditButton.addEventListener("click", function () {
     resetRentalForm();

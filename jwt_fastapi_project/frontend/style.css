@@ -236,6 +236,14 @@ button:hover {
     margin-bottom: 22px;
 }
 
+.auth-form button + button {
+    margin-top: 10px;
+}
+
+.full-button {
+    width: 100%;
+}
+
 .app-grid {
     grid-template-columns: 370px minmax(0, 1fr);
 }

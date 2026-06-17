@@ -171,6 +171,25 @@ def get_user_by_username(db: Session, username: str):
     return db.query(User).filter(User.username == username).first()
 
 
+def create_demo_user():
+    db = SessionLocal()
+    try:
+        demo_user = get_user_by_username(db, "manager")
+        if demo_user is None:
+            demo_user = User(
+                username="manager",
+                full_name="Property Manager",
+                hashed_password=hash_password("secret123"),
+            )
+            db.add(demo_user)
+            db.commit()
+    finally:
+        db.close()
+
+
+create_demo_user()
+
+
 def get_current_user(
     token: str = Depends(oauth2_scheme),
     db: Session = Depends(get_db),
@@ -242,7 +261,10 @@ def login(
     user = get_user_by_username(db, form_data.username)
 
     if not user:
-        raise HTTPException(status_code=401, detail="Wrong username or password")
+        raise HTTPException(
+            status_code=401,
+            detail="Account not found. Create an account first or use the demo login.",
+        )
 
     password_is_correct = verify_password(
         form_data.password,
@@ -250,7 +272,7 @@ def login(
     )
 
     if not password_is_correct:
-        raise HTTPException(status_code=401, detail="Wrong username or password")
+        raise HTTPException(status_code=401, detail="Password is incorrect")
 
     token = create_access_token(user.username)
 
