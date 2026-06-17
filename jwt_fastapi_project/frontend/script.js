@@ -35,6 +35,16 @@ function showJson(data) {
 }
 
 async function readResponse(response) {
+    const contentType = response.headers.get("content-type") || "";
+
+    if (!contentType.includes("application/json")) {
+        const text = await response.text();
+        console.log("Non JSON response:", text);
+        throw new Error(
+            `Server returned ${response.status}. Check that the API route is correct.`
+        );
+    }
+
     const data = await response.json();
 
     if (!response.ok) {
