@@ -3,9 +3,9 @@ from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 import bcrypt
-from fastapi import Depends, FastAPI, HTTPException, status
+from fastapi import Depends, FastAPI, HTTPException, Request, status
 from fastapi.responses import FileResponse
-from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
+from fastapi.security import OAuth2PasswordBearer
 from fastapi.staticfiles import StaticFiles
 from jose import JWTError, jwt
 from pydantic import BaseModel
@@ -171,6 +171,25 @@ def get_user_by_username(db: Session, username: str):
     return db.query(User).filter(User.username == username).first()
 
 
+def create_demo_user():
+    db = SessionLocal()
+    try:
+        demo_user = get_user_by_username(db, "manager")
+        if demo_user is None:
+            demo_user = User(
+                username="manager",
+                full_name="Property Manager",
+                hashed_password=hash_password("secret123"),
+            )
+            db.add(demo_user)
+            db.commit()
+    finally:
+        db.close()
+
+
+create_demo_user()
+
+
 def get_current_user(
     token: str = Depends(oauth2_scheme),
     db: Session = Depends(get_db),
@@ -235,22 +254,39 @@ def signup(user_data: UserCreate, db: Session = Depends(get_db)):
 
 
 @app.post("/login", response_model=TokenResponse)
-def login(
-    form_data: OAuth2PasswordRequestForm = Depends(),
-    db: Session = Depends(get_db),
-):
-    user = get_user_by_username(db, form_data.username)
+async def login(request: Request, db: Session = Depends(get_db)):
+    content_type = request.headers.get("content-type", "")
+
+    if "application/json" in content_type:
+        body = await request.json()
+        username = body.get("username")
+        password = body.get("password")
+    else:
+        form_data = await request.form()
+        username = form_data.get("username")
+        password = form_data.get("password")
+
+    if not username or not password:
+        raise HTTPException(
+            status_code=400,
+            detail="Username and password are required",
+        )
+
+    user = get_user_by_username(db, username)
 
     if not user:
-        raise HTTPException(status_code=401, detail="Wrong username or password")
+        raise HTTPException(
+            status_code=401,
+            detail="Account not found. Create an account first or use the demo login.",
+        )
 
     password_is_correct = verify_password(
-        form_data.password,
+        password,
         user.hashed_password,
     )
 
     if not password_is_correct:
-        raise HTTPException(status_code=401, detail="Wrong username or password")
+        raise HTTPException(status_code=401, detail="Password is incorrect")
 
     token = create_access_token(user.username)
 

@@ -2,6 +2,7 @@ const authArea = document.getElementById("authArea");
 const appArea = document.getElementById("appArea");
 const loginTab = document.getElementById("loginTab");
 const signupTab = document.getElementById("signupTab");
+const demoLoginButton = document.getElementById("demoLoginButton");
 const signupForm = document.getElementById("signupForm");
 const loginForm = document.getElementById("loginForm");
 const rentalForm = document.getElementById("rentalForm");
@@ -35,6 +36,16 @@ function showJson(data) {
 }
 
 async function readResponse(response) {
+    const contentType = response.headers.get("content-type") || "";
+
+    if (!contentType.includes("application/json")) {
+        const text = await response.text();
+        console.log("Non JSON response:", text);
+        throw new Error(
+            `Server returned ${response.status}. Check that the API route is correct.`
+        );
+    }
+
     const data = await response.json();
 
     if (!response.ok) {
@@ -313,6 +324,12 @@ refreshButton.addEventListener("click", loadDashboard);
 loginTab.addEventListener("click", showLoginForm);
 
 signupTab.addEventListener("click", showSignupForm);
+
+demoLoginButton.addEventListener("click", function () {
+    document.getElementById("loginUsername").value = "manager";
+    document.getElementById("loginPassword").value = "secret123";
+    loginForm.requestSubmit();
+});
 
 cancelEditButton.addEventListener("click", function () {
     resetRentalForm();
