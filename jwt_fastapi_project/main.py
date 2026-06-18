@@ -3,9 +3,9 @@ from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 import bcrypt
-from fastapi import Depends, FastAPI, HTTPException, status
+from fastapi import Depends, FastAPI, HTTPException, Request, status
 from fastapi.responses import FileResponse
-from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
+from fastapi.security import OAuth2PasswordBearer
 from fastapi.staticfiles import StaticFiles
 from jose import JWTError, jwt
 from pydantic import BaseModel
@@ -254,11 +254,25 @@ def signup(user_data: UserCreate, db: Session = Depends(get_db)):
 
 
 @app.post("/login", response_model=TokenResponse)
-def login(
-    form_data: OAuth2PasswordRequestForm = Depends(),
-    db: Session = Depends(get_db),
-):
-    user = get_user_by_username(db, form_data.username)
+async def login(request: Request, db: Session = Depends(get_db)):
+    content_type = request.headers.get("content-type", "")
+
+    if "application/json" in content_type:
+        body = await request.json()
+        username = body.get("username")
+        password = body.get("password")
+    else:
+        form_data = await request.form()
+        username = form_data.get("username")
+        password = form_data.get("password")
+
+    if not username or not password:
+        raise HTTPException(
+            status_code=400,
+            detail="Username and password are required",
+        )
+
+    user = get_user_by_username(db, username)
 
     if not user:
         raise HTTPException(
@@ -267,7 +281,7 @@ def login(
         )
 
     password_is_correct = verify_password(
-        form_data.password,
+        password,
         user.hashed_password,
     )
 
